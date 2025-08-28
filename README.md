@@ -1,104 +1,112 @@
-# SplitBill 📱
+# 📱 Split Bill – Arquitectura a Prueba de Futuro
 
-An intelligent Android app that helps you split bills by scanning receipts using AI technology.
+Este proyecto es parte del reto **“Tu Primera Arquitectura a Prueba de Futuro”** impartido por [Antonio Leiva](https://devexpert.io).  
+El objetivo fue transformar una app caótica en una solución mantenible, escalable y fácil de testear, aplicando principios de **Clean Architecture**, **SOLID** y **MVVM con Jetpack Compose**.
 
-## Overview
+---
 
-SplitBill is a modern Android application built with Jetpack Compose that uses Firebase AI to automatically process receipt images and help you split expenses with friends, family, or colleagues. Simply scan a receipt, and the AI will extract the items and prices, allowing you to easily select what each person ordered and calculate individual totals.
+## 🗂️ Estructura de la Arquitectura
 
-## Features
+El proyecto se organiza en **tres capas principales**:
 
-- **📸 Receipt Scanning**: Capture receipt images using your device's camera
-- **🤖 AI Processing**: Powered by Firebase AI to automatically extract items and prices from receipts
-- **💰 Bill Splitting**: Select items for each person and calculate individual totals
-- **📊 Smart Item Detection**: Automatically identifies menu items, quantities, and prices
-- **🌍 Multi-language Support**: Available in English and Spanish
-- **📱 Modern UI**: Built with Jetpack Compose for a smooth, native Android experience
+```
+app/
+ ├── data/        -> Origen y gestión de datos (DataSources, Repositorios)
+ ├── domain/      -> Lógica de negocio (Use Cases)
+ └── ui/          -> Presentación (ViewModels + Composables)
+```
 
-## Tech Stack
+---
 
-- **Language**: Kotlin
-- **UI Framework**: Jetpack Compose
-- **Architecture**: Clean Architecture with MVVM pattern
-- **AI Processing**: Firebase AI (Vertex AI)
-- **Navigation**: Navigation Compose
-- **Local Storage**: DataStore Preferences
-- **Serialization**: Kotlinx Serialization
-- **Build System**: Gradle with Version Catalogs
+## 📅 Aprendizajes por Día
 
-## Getting Started
+### 🔎 Día 1 – El Diagnóstico
+- Identificamos los **code smells** en la app inicial.
+- Principal problema: **mezcla de responsabilidades** (violación del **Principio de Responsabilidad Única – SRP**).
+- Ejemplos:
+   - `HomeScreen` hacía UI, cálculos y gestión de estado.
+   - `ReceiptScreen` controlaba la cámara y además procesaba tickets.
+- Conclusión: había demasiadas razones para cambiar el mismo código → difícil de mantener y escalar.
 
-### Prerequisites
+---
 
-- Android Studio Hedgehog | 2023.1.1 or later
-- JDK 11 or later
-- Android SDK API 26+ (minimum) / API 36 (target)
-- Firebase project with AI services enabled
+### 🛡️ Día 2 – La Capa que lo Cambia Todo
+- Construimos la **Capa de Datos**.
+- Introducción del **Patrón Repositorio** + **Patrón DataSource**:
+   - `TicketDataSource` → interfaz que define cómo procesar tickets.
+   - `MLKitTicketDataSource` → implementación concreta usando ML Kit.
+   - `TicketRepository` → único punto de acceso para orquestar datos.
+- Beneficio: separamos el *qué* de los datos del *cómo se obtienen*.
 
-### Setup
+---
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd split-bill
-   ```
+### 🧠 Día 3 – El Cerebro de la App
+- Creamos la **Capa de Dominio**.
+- Uso de **Casos de Uso (Use Cases)**:
+   - Ejemplo: `ProcessTicketUseCase`.
+- Características:
+   - Son clases **puras de Kotlin**, sin dependencias de Android.
+   - Encapsulan lógica de negocio y orquestan repositorios.
+   - Testeables en milisegundos.
+- Resultado: la inteligencia de la app queda aislada y reutilizable.
 
-2. **Firebase Configuration**
-   - Create a Firebase project at [console.firebase.google.com](https://console.firebase.google.com)
-   - Enable Firebase AI services
-   - Download `google-services.json` and place it in the `app/` directory
+---
 
-3. **Build the project**
-   ```bash
-   ./gradlew build
-   ```
+### 🎨 Día 4 – La UI Inteligente y Reactiva
+- Implementamos la **Capa de Presentación** con **MVVM + UDF (Flujo de Datos Unidireccional)**.
+- Introducción de `ViewModels` que:
+   - Ejecutan casos de uso.
+   - Exponen un único `UiState` observable.
+   - Manejan eventos desde la UI.
+- Refactorización:
+   - `HomeScreen` y `ReceiptScreen` quedaron como **Composables “tontos”** → solo pintan estado y delegan la lógica al ViewModel.
+- Beneficio: UI más predecible, fácil de testear y mantenible.
 
-4. **Run the app**
-   - Open the project in Android Studio
-   - Select a device or emulator
-   - Click Run
+---
 
-## Usage
+## 🏗️ Diagrama General
 
-1. **Launch the app** and you'll see the home screen with scan counter
-2. **Tap "Scan Ticket"** to open the camera
-3. **Take a photo** of your receipt
-4. **Wait for AI processing** - the app will extract items and prices automatically
-5. **Select items** for each person by tapping on them
-6. **View totals** for selected items
-7. **Mark as paid** when done
+```mermaid
+flowchart TD
+    subgraph Data
+        DS1[TicketDataSource] --> Repo[TicketRepository]
+        DS2[MLKitTicketDataSource]
+    end
 
-## Configuration
+    subgraph Domain
+        UC[ProcessTicketUseCase]
+    end
 
-### Build Variants
+    subgraph Presentation
+        VM1[HomeViewModel]
+        VM2[ReceiptViewModel]
+        UI1[HomeScreen]
+        UI2[ReceiptScreen]
+    end
 
-- **Debug**: Development build with debug logging
-- **Release**: Production build with code obfuscation and optimization
+    Repo --> UC
+    UC --> VM1
+    UC --> VM2
+    VM1 --> UI1
+    VM2 --> UI2
+```
 
-### Scan Limits
+---
 
-The app implements a scan counter system to manage usage. Users have a limited number of scans available.
+## ✅ Beneficios de esta Arquitectura
 
-## License
+- **Mantenible** → cada capa tiene responsabilidades claras.
+- **Testeable** → casos de uso puros de Kotlin, sin dependencias de Android.
+- **Escalable** → fácil añadir nuevas fuentes de datos o lógica.
+- **Predecible** → UI controlada por un único `UiState`.
 
-MIT License
+---
 
-Copyright (c) 2025 SplitBill
+## 📚 Recursos del Reto
+- [Repositorio base Split Bill](https://github.com/devexpert-io/split-bill)
+- [Canal de Discord](https://devexpert.io/discord)
+- [Directos en YouTube](https://youtube.com/@AntonioLeiva)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+---
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+✍️ **Autor del Reto:** [Antonio Leiva](http://devexpert.io) – Google Developer Expert en Android
