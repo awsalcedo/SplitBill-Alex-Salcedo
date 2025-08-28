@@ -18,6 +18,7 @@ hilt-compiler = "1.2.0"
 ksp = "2.2.0-2.0.2"
 androidxLlifecycleViewmodelCompose = "2.8.7"
 hilt-navigation-compose = "1.2.0"
+kotlinxCoroutinesTest = "1.10.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -58,6 +59,8 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 
 # Material Icons Extended (versión del BOM)
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
+
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
