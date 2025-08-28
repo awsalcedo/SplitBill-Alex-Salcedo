@@ -3,17 +3,20 @@ package io.devexpert.splitbill.ui.screens.home
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.devexpert.splitbill.domain.usecases.ProcessTicketUseCase
-import io.devexpert.splitbill.domain.usecases.InitializeScanCounterUseCase
-import io.devexpert.splitbill.domain.usecases.GetScansRemainingUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.devexpert.splitbill.domain.usecases.DecrementScanCounterUseCase
+import io.devexpert.splitbill.domain.usecases.GetScansRemainingUseCase
+import io.devexpert.splitbill.domain.usecases.InitializeScanCounterUseCase
+import io.devexpert.splitbill.domain.usecases.ProcessTicketUseCase
 import io.devexpert.splitbill.ui.ImageConverter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val processTicketUseCase: ProcessTicketUseCase,
     private val initializeScanCounterUseCase: InitializeScanCounterUseCase,
     private val getScansRemainingUseCase: GetScansRemainingUseCase,
@@ -55,7 +58,7 @@ class HomeViewModel(
             }
         }
     }
-    
+
     fun resetTicketProcessed() {
         _uiState.value = _uiState.value.copy(ticketProcessed = false)
     }

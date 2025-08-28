@@ -5,8 +5,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import javax.inject.Inject
 
-class MockTicketDataSource : TicketDataSource {
+class MockTicketDataSource @Inject constructor() : TicketDataSource {
     
     private val json = Json { ignoreUnknownKeys = true }
     

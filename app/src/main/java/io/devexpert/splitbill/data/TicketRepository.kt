@@ -1,6 +1,8 @@
 package io.devexpert.splitbill.data
 
-class TicketRepository(private val ticketDataSource: TicketDataSource) {
+import javax.inject.Inject
+
+class TicketRepository @Inject constructor(private val ticketDataSource: TicketDataSource) {
 
     private var _ticketData: TicketData? = null
 

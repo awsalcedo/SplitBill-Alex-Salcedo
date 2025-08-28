@@ -10,8 +10,9 @@ import io.devexpert.splitbill.ui.ImageConverter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import javax.inject.Inject
 
-class MLKitTicketDataSource : TicketDataSource {
+class MLKitTicketDataSource @Inject constructor() : TicketDataSource {
 
     private val json = Json { ignoreUnknownKeys = true }
 

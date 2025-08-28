@@ -12,10 +12,11 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
+import javax.inject.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "scan_counter")
 
-class DataStoreScanCounterDataSource(private val context: Context) : ScanCounterDataSource {
+class DataStoreScanCounterDataSource @Inject constructor(private val context: Context) : ScanCounterDataSource {
     
     companion object {
         private val FIRST_USE_DATE_KEY = longPreferencesKey("first_use_date")

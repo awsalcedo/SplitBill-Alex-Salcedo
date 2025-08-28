@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.devexpert.splitbill.R
 import io.devexpert.splitbill.data.TicketData
 import java.util.Locale
@@ -26,7 +27,7 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReceiptScreen(
-    viewModel: ReceiptViewModel,
+    viewModel: ReceiptViewModel = hiltViewModel(),
     onBackPressed: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
