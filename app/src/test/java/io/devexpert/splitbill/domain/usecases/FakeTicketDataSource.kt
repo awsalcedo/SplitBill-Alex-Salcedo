@@ -1,14 +1,10 @@
 package io.devexpert.splitbill.domain.usecases
 
-import io.devexpert.splitbill.data.TicketRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
-import org.junit.Before
-import org.junit.Test
+import io.devexpert.splitbill.data.TicketData
+import io.devexpert.splitbill.data.TicketDataSource
+import kotlinx.serialization.json.Json
 
-/*private class FakeTicketDataSource : TicketDataSource {
+class FakeTicketDataSource : TicketDataSource {
     private val json = Json { ignoreUnknownKeys = true }
     private val MOCK_JSON = """
         {
@@ -41,32 +37,5 @@ import org.junit.Test
 
     override suspend fun processTicket(imageBytes: ByteArray): TicketData {
         return json.decodeFromString(MOCK_JSON)
-    }
-}*/
-
-class ProcessTicketUseCaseTest {
-
-    private lateinit var repository: TicketRepository
-    private lateinit var useCase: ProcessTicketUseCase
-
-    @Before
-    fun setUp() {
-        repository = TicketRepository(FakeTicketDataSource())
-        useCase = ProcessTicketUseCase(repository)
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Test
-    fun `invoke processes ticket with mock data successfully`() = runTest {
-        // Arrange
-        val dummyImage = ByteArray(16)
-
-        // Act
-        val result = useCase(dummyImage)
-
-        // Assert (según el JSON del mock)
-        assertTrue(result.items.isNotEmpty())
-        assertEquals(21, result.items.size)
-        assertEquals(272.20, result.total, 0.001)
     }
 }
