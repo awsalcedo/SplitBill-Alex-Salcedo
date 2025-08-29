@@ -19,6 +19,8 @@ ksp = "2.2.0-2.0.2"
 androidxLlifecycleViewmodelCompose = "2.8.7"
 hilt-navigation-compose = "1.2.0"
 kotlinxCoroutinesTest = "1.10.2"
+mockk = "1.13.12"
+robolectric = "4.12.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -60,7 +62,10 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 # Material Icons Extended (versión del BOM)
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 
+#Testing
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
